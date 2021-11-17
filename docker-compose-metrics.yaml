@@ -1,0 +1,39 @@
+version: "3"
+
+services:
+  influxdb:
+    image: influxdb:2.0.7
+    ports:
+      - "8086:8086"
+    environment:
+            DOCKER_INFLUXDB_INIT_MODE: setup
+            DOCKER_INFLUXDB_INIT_USERNAME: alessandro 
+            DOCKER_INFLUXDB_INIT_PASSWORD: temp1234! 
+            DOCKER_INFLUXDB_INIT_ORG: mylab 
+            DOCKER_INFLUXDB_INIT_BUCKET: sonarqube 
+    volumes:
+      - influxdb2:/var/lib/influxdb2
+   
+  telegraf:
+    image: telegraf:latest
+    volumes:
+      - /home/alessandro/telegraf.conf:/etc/telegraf/telegraf.conf:ro
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+      - /sys:/host/sys:ro
+      - /proc:/host/proc:ro
+      - /etc:/host/etc:ro
+    environment:
+      - HOST_PROC=/host/proc
+      - HOST_SYS=/host/sys
+      - HOST_ETC=/host/etc
+
+  grafana:
+    image: grafana/grafana:latest
+    volumes:
+      - grafana:/var/lib/grafana
+    ports:
+      - "3000:3000"
+    restart: always 
+volumes:
+  influxdb2:
+  grafana:
