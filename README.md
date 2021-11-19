@@ -40,6 +40,13 @@
 >> echo "fs.file-max=131072" | sudo tee -a /etc/sysctl.conf
 >> sudo  sysctl -p
 
+note: the firt two commands of the list above can be replaced with this one:
+
+sed -i -e '$a\vm.max_map_count=524288' -e '/vm.max_map_count=524288/d' hello.txt
+sed -i -e '$a\fs.file-max=131072' -e '/fs.file-max=131072d' hello.txt
+
+>! the advantage is that I can run those command multiple time without duplicating the entries!
+
 # generate self-signed-certificates
 docker container run -v "$(pwd)/certs:/certs" -e HOST_NAME=sonarqubeaa.westeurope.cloudapp.azure.com diamol/cert-generator
 > not: they are not good for azure
